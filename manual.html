@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual — Sonfex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan:  #00f5ff;
+    --green: #00e676;
+    --dark:  #080c10;
+    --dim:   #8899aa;
+    --surface: #0d1620;
+    --border:  #1a2a3a;
+    --text:    #c8d8e8;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  /* ── NAV (matches site exactly) ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: linear-gradient(to bottom, rgba(8,12,16,0.95) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+  }
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    letter-spacing: 0.12em;
+    color: #fff;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--cyan); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover,
+  .nav-links a.active { color: var(--cyan); }
+  .nav-cta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dark);
+    background: var(--cyan);
+    padding: 9px 20px;
+    text-decoration: none;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--green); }
+
+  /* ── Layout ── */
+  .page { display: flex; padding-top: 80px; min-height: 100vh; }
+
+  /* ── Sidebar ── */
+  aside {
+    width: 240px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    padding: 32px 0 48px;
+    border-right: 1px solid var(--border);
+  }
+  aside::-webkit-scrollbar { width: 4px; }
+  aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .aside-section {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 18px 24px 4px;
+  }
+  aside a {
+    display: block;
+    padding: 5px 24px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  aside a:hover { color: var(--text); }
+  aside a.active { color: var(--cyan); border-left-color: var(--cyan); }
+
+  /* ── Content ── */
+  .content {
+    flex: 1;
+    padding: 48px 64px 80px;
+    max-width: 820px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    margin-bottom: 56px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 52px;
+    letter-spacing: 0.06em;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .hero h1 span { color: var(--cyan); }
+  .hero p { margin-top: 16px; color: var(--dim); font-size: 13px; max-width: 520px; }
+
+  /* ── Sections ── */
+  section { margin-bottom: 64px; scroll-margin-top: 100px; }
+
+  h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  h2 span { color: var(--cyan); }
+
+  h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin: 28px 0 8px;
+  }
+
+  h4 {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin: 18px 0 6px;
+  }
+
+  p { margin-bottom: 12px; color: var(--dim); }
+  p strong { color: var(--text); }
+
+  /* ── Tables ── */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th {
+    text-align: left;
+    padding: 8px 14px;
+    background: var(--surface);
+    color: var(--cyan);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+  }
+  td {
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--dim);
+  }
+  td strong { color: var(--text); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* ── Button labels ── */
+  .btn {
+    display: inline-block;
+    background: rgba(0,245,255,0.08);
+    border: 1px solid rgba(0,245,255,0.25);
+    color: var(--cyan);
+    padding: 1px 8px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  }
+
+  /* ── Kbd ── */
+  kbd {
+    display: inline-block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--cyan);
+    padding: 1px 7px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    border-radius: 3px;
+  }
+
+  /* ── Callout boxes ── */
+  .callout {
+    border-left: 3px solid;
+    padding: 12px 16px;
+    margin: 18px 0;
+    font-size: 13px;
+    background: rgba(255,255,255,0.02);
+  }
+  .callout.tip  { border-color: var(--cyan);  }
+  .callout.warn { border-color: var(--green); }
+  .callout .label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .callout.tip  .label { color: var(--cyan); }
+  .callout.warn .label { color: var(--green); }
+
+  /* ── Steps ── */
+  ol.steps { list-style: none; counter-reset: s; padding: 0; }
+  ol.steps li {
+    counter-increment: s;
+    position: relative;
+    padding: 10px 14px 10px 46px;
+    margin-bottom: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--dim);
+  }
+  ol.steps li::before {
+    content: counter(s);
+    position: absolute;
+    left: 14px; top: 50%; transform: translateY(-50%);
+    width: 22px; height: 22px;
+    background: var(--cyan);
+    color: var(--dark);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  }
+
+  /* ── Preset swatches ── */
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .swatch {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+  .swatch .sw-name { color: #fff; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; }
+  .swatch .sw-desc { color: var(--dim); font-size: 11px; margin-top: 2px; }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  footer a { color: var(--cyan); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    aside { display: none; }
+    .content { padding: 32px 24px; }
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" href="index.html">SON<span>FEX</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#features">Features</a></li>
+    <li><a href="index.html#specs">Specs</a></li>
+    <li><a href="manual.html" class="active">Manual</a></li>
+  </ul>
+  <a class="nav-cta" href="index.html#download">Download</a>
+</nav>
+
+<div class="page">
+
+<!-- ── SIDEBAR ── -->
+<aside>
+  <div class="aside-section">Getting Started</div>
+  <a href="#overview">Overview</a>
+  <a href="#interface">Interface Layout</a>
+
+  <div class="aside-section">Playback</div>
+  <a href="#transport">Transport</a>
+  <a href="#arrangement">Arrangement Modes</a>
+  <a href="#tempo">Tempo &amp; Transpose</a>
+
+  <div class="aside-section">Sequencing</div>
+  <a href="#melody">Melody Editor</a>
+  <a href="#chord">Chord Editor</a>
+  <a href="#bass">Bass Grid</a>
+  <a href="#drums">Drum Grid</a>
+  <a href="#pianoroll">Piano Roll</a>
+
+  <div class="aside-section">Mixer</div>
+  <a href="#mixer">Channel Mixer</a>
+  <a href="#fx">FX Slots</a>
+  <a href="#globalfx">Global FX Bus</a>
+
+  <div class="aside-section">Instruments</div>
+  <a href="#vst">VST Instruments</a>
+  <a href="#sampler">Sampler</a>
+
+  <div class="aside-section">Customisation</div>
+  <a href="#theme">Theme Editor</a>
+  <a href="#presets">Theme Presets</a>
+  <a href="#clickedit">Click Edit Mode</a>
+
+  <div class="aside-section">File &amp; MIDI</div>
+  <a href="#projects">Projects</a>
+  <a href="#midi">MIDI Learn</a>
+</aside>
+
+<!-- ── CONTENT ── -->
+<div class="content">
+
+  <div class="hero">
+    <div class="hero-eyebrow">Documentation</div>
+    <h1>User <span>Manual</span></h1>
+    <p>Complete reference for NewProject — loop-based composition, live arrangement, VST hosting, and visual customisation.</p>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <h2><span>//</span> Overview</h2>
+    <p>NewProject is a desktop music production application built on the JUCE framework. It combines a pattern-based arranger with a full mixer, VST instrument hosting, a sampler, and a highly customisable visual theme system.</p>
+    <p>The application is designed for loop-based composition and live arrangement — each section (Intro, Main, Fill, End, and four Variations) can be triggered independently, making it suitable for both studio work and live performance.</p>
+    <div class="callout tip">
+      <div class="label">Platform</div>
+      Windows 64-bit. Audio is routed through your system default audio device or any ASIO-compatible interface.
+    </div>
+  </section>
+
+  <!-- INTERFACE -->
+  <section id="interface">
+    <h2><span>//</span> Interface Layout</h2>
+    <table>
+      <tr><th>Zone</th><th>Description</th></tr>
+      <tr><td><strong>Top Bar</strong></td><td>Transport, arrangement mode buttons, variation buttons, tempo, transpose, and utilities.</td></tr>
+      <tr><td><strong>Melody Column</strong></td><td>Melody volume fader, FX chain, load melody, and piano roll access.</td></tr>
+      <tr><td><strong>Chord Column</strong></td><td>Chord volume fader and chord FX chain.</td></tr>
+      <tr><td><strong>Instrument Columns</strong></td><td>Up to 4 instrument channels — fader, pan, mute/solo, and FX sends each.</td></tr>
+      <tr><td><strong>Drum Panel</strong></td><td>Step sequencer grid with per-channel strips (volume, pan, mute, solo, FX).</td></tr>
+      <tr><td><strong>Bass Grid</strong></td><td>Step sequencer for bass patterns.</td></tr>
+      <tr><td><strong>Sampler Panel</strong></td><td>Waveform display, slicing, keyboard mapping, loop playback.</td></tr>
+      <tr><td><strong>Status Bar</strong></td><td>Shows current playback state and active section.</td></tr>
+    </table>
+  </section>
+
+  <!-- TRANSPORT -->
+  <section id="transport">
+    <h2><span>//</span> Transport Controls</h2>
+    <table>
+      <tr><th>Button</th><th>Action</th></tr>
+      <tr><td><span class="btn">▶ Play</span></td><td>Starts playback of the current section in a continuous loop.</td></tr>
+      <tr><td><span class="btn">■ Stop</span></td><td>Stops playback immediately.</td></tr>
+      <tr><td><span class="btn">Metronome</span></td><td>Toggles the click track on/off during playback.</td></tr>
+    </table>
+    <div class="callout tip">
+      <div class="label">Live Use</div>
+      Arrangement mode buttons can be clicked <strong>while playing</strong> to switch sections on the fly without stopping.
+    </div>
+  </section>
+
+  <!-- ARRANGEMENT -->
+  <section id="arrangement">
+    <h2><span>//</span> Arrangement Modes</h2>
+    <p>Each section stores its own independent pattern data for melody, chords, bass, and drums.</p>
+    <table>
+      <tr><th>Button</th><th>Description</th></tr>
+      <tr><td><span class="btn">Intro</span></td><td>Intro section — used at the start of a performance.</td></tr>
+      <tr><td><span class="btn">Main</span></td><td>Primary loop — the core groove of the track.</td></tr>
+      <tr><td><span class="btn">Fill</span></td><td>Short transitional fill, typically 1–2 bars.</td></tr>
+      <tr><td><span class="btn">Fill 2</span></td><td>Second fill variant for added performance variety.</td></tr>
+      <tr><td><span class="btn">End</span></td><td>Outro / ending section.</td></tr>
+      <tr><td><span class="btn">Vari 1–4</span></td><td>Four free variation slots for breakdowns, B-sections, or alternative grooves.</td></tr>
+    </table>
+    <div class="callout warn">
+      <div class="label">Note</div>
+      Pattern data is stored per-section. Editing the drum grid in <strong>Main</strong> does not affect the <strong>Fill</strong> pattern.
+    </div>
+  </section>
+
+  <!-- TEMPO -->
+  <section id="tempo">
+    <h2><span>//</span> Tempo &amp; Transpose</h2>
+    <h3>Tempo</h3>
+    <p>The <strong>Tempo</strong> slider in the top bar controls global BPM. Drag left/right to adjust.</p>
+    <h3>Global Transpose</h3>
+    <p>Shifts all melodic content (melody, chords, bass) up or down in semitones. Use the <span class="btn">▲</span> / <span class="btn">▼</span> buttons for single-semitone steps — useful for real-time key changes without re-editing patterns.</p>
+    <h3>Split</h3>
+    <p>The <strong>Split</strong> slider divides the keyboard between melody and chord input, allowing both hands to play different parts simultaneously from one MIDI controller.</p>
+  </section>
+
+  <!-- MELODY -->
+  <section id="melody">
+    <h2><span>//</span> Melody Editor</h2>
+    <h3>Loading a Melody</h3>
+    <p>Click <span class="btn">Load Melody</span> to import a MIDI file or a previously saved melody pattern.</p>
+    <h3>Opening the Editor</h3>
+    <p>Click <span class="btn">Open Melody Editor</span> to open the piano roll for the melody track.</p>
+    <h3>Toggles</h3>
+    <table>
+      <tr><th>Toggle</th><th>Description</th></tr>
+      <tr><td><span class="btn">Hear L</span></td><td>Routes the left-hand keyboard split to the melody instrument for real-time auditioning.</td></tr>
+      <tr><td><span class="btn">Chord Hold</span></td><td>Sustains the last chord until a new one is triggered.</td></tr>
+      <tr><td><span class="btn">Chord Track</span></td><td>Locks chord playback to follow the sequenced pattern rather than live keyboard input.</td></tr>
+    </table>
+  </section>
+
+  <!-- CHORD -->
+  <section id="chord">
+    <h2><span>//</span> Chord Editor</h2>
+    <p>The chord system plays harmonic backing automatically or via MIDI input. The chord column has its own volume fader and FX chain. The <strong>Chord Label</strong> display shows the currently active chord name during playback.</p>
+    <div class="callout tip">
+      <div class="label">Tip</div>
+      Use <span class="btn">Chord Hold</span> with live input to strum chords into the arrangement without constant re-triggering.
+    </div>
+  </section>
+
+  <!-- BASS -->
+  <section id="bass">
+    <h2><span>//</span> Bass Grid</h2>
+    <p>A step sequencer for pitched bass-line patterns. Activate steps by clicking cells. Right-click a step for pitch and velocity options.</p>
+    <table>
+      <tr><th>Button</th><th>Action</th></tr>
+      <tr><td><span class="btn">Copy Bass</span></td><td>Copies the current bass pattern.</td></tr>
+      <tr><td><span class="btn">Paste Bass</span></td><td>Pastes a copied bass pattern into the current section.</td></tr>
+    </table>
+  </section>
+
+  <!-- DRUMS -->
+  <section id="drums">
+    <h2><span>//</span> Drum Grid</h2>
+    <p>A multi-channel step sequencer. Each row is a drum channel. Each channel has its own volume dial, pan, mute, solo, and FX slots. Channel name buttons flash on each hit during playback as a live VU indicator.</p>
+    <table>
+      <tr><th>Button</th><th>Action</th></tr>
+      <tr><td><span class="btn">Copy Drums</span></td><td>Copies the entire drum pattern for the current section.</td></tr>
+      <tr><td><span class="btn">Paste Drums</span></td><td>Pastes a copied drum pattern.</td></tr>
+      <tr><td><span class="btn">Clear Drums</span></td><td>Erases all steps in the current drum pattern.</td></tr>
+    </table>
+  </section>
+
+  <!-- PIANO ROLL -->
+  <section id="pianoroll">
+    <h2><span>//</span> Piano Roll</h2>
+    <p>Note-level editing for melody and drum patterns. Click <span class="btn">↗</span> to expand into piano roll mode.</p>
+    <table>
+      <tr><th>Action</th><th>Result</th></tr>
+      <tr><td>Left-click empty cell</td><td>Add a note</td></tr>
+      <tr><td>Left-click existing note</td><td>Select / move note</td></tr>
+      <tr><td>Right-click note</td><td>Delete note</td></tr>
+      <tr><td><span class="btn">Chord Lock</span></td><td>Constrains notes to active chord scale degrees</td></tr>
+    </table>
+    <div class="callout tip">
+      <div class="label">Tip</div>
+      Switching tracks while in piano roll mode re-locks the roll to the newly selected track automatically.
+    </div>
+  </section>
+
+  <!-- MIXER -->
+  <section id="mixer">
+    <h2><span>//</span> Channel Mixer</h2>
+    <table>
+      <tr><th>Control</th><th>Description</th></tr>
+      <tr><td><strong>Fader</strong></td><td>Vertical linear fader — drag to adjust channel volume (0 to +150%).</td></tr>
+      <tr><td><strong>Pan Strip</strong></td><td>Horizontal dual-point pan below the fader. Left dot = L pan, right dot = R pan. Double-click a dot to reset to centre.</td></tr>
+      <tr><td><span class="btn">M</span> Mute</td><td>Silences the channel. Lit when active.</td></tr>
+      <tr><td><span class="btn">S</span> Solo</td><td>Solos the channel, muting all others.</td></tr>
+      <tr><td><strong>Stereo Meter</strong></td><td>Narrow vertical bar showing live L/R levels — green → yellow → red.</td></tr>
+    </table>
+    <h3>Track Name Button</h3>
+    <p>Shows the loaded instrument name. <strong>Left-click</strong> to select the track. <strong>Right-click</strong> for the load / clear instrument menu. The small <span class="btn">L</span> and <span class="btn">C</span> corner buttons provide quick access to Load and Clear.</p>
+  </section>
+
+  <!-- FX -->
+  <section id="fx">
+    <h2><span>//</span> FX Slots (Per Channel)</h2>
+    <p>Each channel has 4 VST effect insert slots.</p>
+    <ol class="steps">
+      <li>Click <span class="btn">Load</span> on the desired FX slot to browse for a VST plugin.</li>
+      <li>Click <span class="btn">GUI</span> to open the plugin's own editor window.</li>
+      <li>Toggle <span class="btn">B</span> (Bypass) to disable the effect without unloading it.</li>
+    </ol>
+    <p>The <strong>FX send dials</strong> below the fader route signal to the Global FX buses.</p>
+  </section>
+
+  <!-- GLOBAL FX -->
+  <section id="globalfx">
+    <h2><span>//</span> Global FX Bus</h2>
+    <p>Four global buses for parallel processing (reverb, delay, compression, etc.). Any channel can send to any bus via the FX send dials.</p>
+    <table>
+      <tr><th>Button</th><th>Action</th></tr>
+      <tr><td><span class="btn">Load</span></td><td>Load a VST plugin into this bus.</td></tr>
+      <tr><td><span class="btn">E</span></td><td>Open the plugin editor GUI.</td></tr>
+      <tr><td><span class="btn">On</span></td><td>Enable / disable the entire bus.</td></tr>
+    </table>
+  </section>
+
+  <!-- VST -->
+  <section id="vst">
+    <h2><span>//</span> VST Instruments</h2>
+    <ol class="steps">
+      <li>Right-click the track name button (or click the small <span class="btn">L</span> button).</li>
+      <li>Select <strong>Load VST...</strong> and browse to your <code>.dll</code> / <code>.vst3</code> file.</li>
+      <li>Click <span class="btn">GUI</span> to open the plugin editor.</li>
+    </ol>
+    <p>Choose <strong>Load Sample...</strong> instead to load an audio file as a one-shot instrument. Use <strong>Clear instrument</strong> to remove it.</p>
+    <h3>Solo / Poly Mode</h3>
+    <p>The <span class="btn">Solo / Poly</span> button toggles between monophonic and polyphonic MIDI output for that channel.</p>
+  </section>
+
+  <!-- SAMPLER -->
+  <section id="sampler">
+    <h2><span>//</span> Sampler</h2>
+    <p>The built-in sampler provides waveform playback, slicing, and keyboard mapping.</p>
+    <h3>Loading Audio</h3>
+    <p>Click the load button in the sampler panel to import a WAV or AIFF file. The waveform is displayed and playable immediately.</p>
+    <h3>Loop Playback</h3>
+    <p>Use the range start/end markers in the waveform display to define the loop region.</p>
+    <h3>Slicing</h3>
+    <p>Enable slice mode to detect transients and map each slice to a key on the on-screen keyboard.</p>
+    <h3>Sending Slices</h3>
+    <table>
+      <tr><th>Button</th><th>Action</th></tr>
+      <tr><td><span class="btn">Send to Drum</span></td><td>Sends a selected slice to a drum channel for step-sequenced playback.</td></tr>
+      <tr><td><span class="btn">Send to Multi</span></td><td>Distributes all slices across instrument channels.</td></tr>
+    </table>
+    <div class="callout tip">
+      <div class="label">Tip</div>
+      Use <strong>Send to Drum</strong> to quickly extract individual hits from a loop and map them to the drum grid.
+    </div>
+  </section>
+
+  <!-- THEME EDITOR -->
+  <section id="theme">
+    <h2><span>//</span> Theme Editor</h2>
+    <p>Open via the <span class="btn">Theme</span> button. Every colour in the interface is editable. Changes apply to the live UI instantly.</p>
+    <ol class="steps">
+      <li>Select a <strong>Group</strong> (e.g. "Fader / Dial Track", "Mute Button").</li>
+      <li>If the group has states, select the <strong>Part</strong> (Off Bg, On Bg, Off Text, On Text).</li>
+      <li>Use the colour picker or type a hex code into the hex field. Click the field to select all for easy copy/paste.</li>
+    </ol>
+    <h3>Save &amp; Load</h3>
+    <table>
+      <tr><th>Button</th><th>Action</th></tr>
+      <tr><td><span class="btn">Save As...</span></td><td>Saves theme to a <code>.json</code> file. Does not change the startup default.</td></tr>
+      <tr><td><span class="btn">Set As Default</span></td><td>Sets current theme as the startup default immediately — no file dialog.</td></tr>
+      <tr><td><span class="btn">Load...</span></td><td>Loads a previously saved <code>.json</code> theme file.</td></tr>
+      <tr><td><span class="btn">Reset Grey</span></td><td>Reverts to the built-in grey default.</td></tr>
+    </table>
+    <div class="callout tip">
+      <div class="label">Default Location</div>
+      <code>%AppData%\ArrangerApp\theme.json</code> — The editor window size is also remembered between sessions.
+    </div>
+  </section>
+
+  <!-- PRESETS -->
+  <section id="presets">
+    <h2><span>//</span> Theme Presets</h2>
+    <p>The <strong>Presets</strong> dropdown applies a full theme instantly as a starting point for customisation.</p>
+    <div class="swatches">
+      <div class="swatch" style="background:#1a0a2e; border-color:#7c3aed;">
+        <div class="sw-name" style="color:#c084fc;">Midnight Purple</div>
+        <div class="sw-desc">Deep purple / violet</div>
+      </div>
+      <div class="swatch" style="background:#1a1a1a; border-color:#555;">
+        <div class="sw-name" style="color:#aaa;">Grey Reset</div>
+        <div class="sw-desc">Neutral factory default</div>
+      </div>
+      <div class="swatch" style="background:#0b1a1e; border-color:#005f66;">
+        <div class="sw-name" style="color:#00f5ff;">Dark Teal</div>
+        <div class="sw-desc">Dark bg, teal accents</div>
+      </div>
+      <div class="swatch" style="background:#0d1117; border-color:#7a6a00;">
+        <div class="sw-name" style="color:#e0c84a;">Vitesse (Exact)</div>
+        <div class="sw-desc">High-contrast yellow</div>
+      </div>
+      <div class="swatch" style="background:#0b0f1a; border-color:#2a4a5e;">
+        <div class="sw-name" style="color:#7eb8d4;">Obsidian Studio</div>
+        <div class="sw-desc">Cool dark blue</div>
+      </div>
+      <div class="swatch" style="background:#16202c; border-color:#3a5a6e;">
+        <div class="sw-name" style="color:#90b4c8;">Slate Pro</div>
+        <div class="sw-desc">Muted slate blue</div>
+      </div>
+      <div class="swatch" style="background:#1a1208; border-color:#7a5010;">
+        <div class="sw-name" style="color:#f0a030;">Amber Console</div>
+        <div class="sw-desc">Warm retro amber</div>
+      </div>
+      <div class="swatch" style="background:#081420; border-color:#005878;">
+        <div class="sw-name" style="color:#4ac8e8;">Deep Ocean</div>
+        <div class="sw-desc">Deep navy and blue</div>
+      </div>
+      <div class="swatch" style="background:#111314; border-color:#3a3f44;">
+        <div class="sw-name" style="color:#c8d0d8;">Carbon Noir</div>
+        <div class="sw-desc">Near-black minimal</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLICK EDIT -->
+  <section id="clickedit">
+    <h2><span>//</span> Click Edit Mode</h2>
+    <p>Identify and edit any element's colour by clicking directly on it — no need to search the group dropdown.</p>
+    <ol class="steps">
+      <li>Open the Theme Editor and click <span class="btn">Click Edit</span>.</li>
+      <li>The main window gets a blue tint and the cursor becomes a crosshair.</li>
+      <li>Hover over any element — a highlight border and group name badge appear.</li>
+      <li>Click the element. The Theme Editor jumps to that group and comes to the front.</li>
+      <li>Press <kbd>ESC</kbd> to cancel at any time.</li>
+    </ol>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <h2><span>//</span> Projects</h2>
+    <p>Use <span class="btn">Save</span> and <span class="btn">Load</span> in the top bar to save and restore projects. All patterns, instrument assignments, mixer settings, and FX chains are stored in the project file.</p>
+    <div class="callout warn">
+      <div class="label">Note</div>
+      VST plugin state is saved within the project file. If a plugin is moved or uninstalled it may not load correctly on next open.
+    </div>
+  </section>
+
+  <!-- MIDI LEARN -->
+  <section id="midi">
+    <h2><span>//</span> MIDI Learn</h2>
+    <p>Most controls support MIDI Learn — map any hardware knob, fader, or button to any on-screen parameter.</p>
+    <ol class="steps">
+      <li>Right-click the control you want to map.</li>
+      <li>Select <strong>MIDI Learn</strong> from the context menu.</li>
+      <li>Move the desired knob or button on your MIDI controller.</li>
+      <li>The mapping is made automatically and persists with the project.</li>
+    </ol>
+    <p>Right-click a mapped control and choose <strong>Clear MIDI Learn</strong> to remove the assignment.</p>
+    <div class="callout tip">
+      <div class="label">Live Use</div>
+      Transport and arrangement mode buttons also support MIDI Learn — assign them to pads for hands-free section switching during performance.
+    </div>
+  </section>
+
+</div><!-- /content -->
+</div><!-- /page -->
+
+<footer>
+  <span>Sonfex &mdash; User Manual &mdash; 2026</span>
+  <a href="index.html">← Back to Site</a>
+</footer>
+
+<script>
+  const links = document.querySelectorAll('aside a');
+  const sections = document.querySelectorAll('section[id]');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(a => a.classList.remove('active'));
+        const a = document.querySelector(`aside a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -75% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
